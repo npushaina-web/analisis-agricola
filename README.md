@@ -105,6 +105,7 @@ La presentación utilizada para la socialización del trabajo de grado se encuen
 
 ```text
 presentacion/
+```
 
 ## Bases de datos utilizadas
 
