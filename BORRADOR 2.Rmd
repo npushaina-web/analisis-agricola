@@ -1,0 +1,1107 @@
+---
+title: "Análisis estadístico y geoespacial de la rentabilidad agrícola en el municipio de La Paz, Cesar"
+author: "Nedilson Pushaina Ramírez"
+date: "12 de marzo de 2026"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: true
+    toc_depth: 3
+    number_sections: false
+    theme: flatly
+    highlight: tango
+    css: estilos.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = FALSE,
+  warning = FALSE,
+  message = FALSE,
+  fig.align = "center",
+  fig.width = 7,
+  fig.height = 5
+)
+
+options(scipen = 999)
+
+```
+
+# Resumen
+
+El presente trabajo de grado tiene como objetivo analizar la rentabilidad de los sistemas agrícolas del municipio de La Paz, Cesar, mediante el uso de herramientas estadísticas y geoespaciales. Para ello, se empleó información productiva, económica y espacial correspondiente al año 2024, asociada a productores agrícolas del municipio.
+
+El estudio se centró en los cultivos de café, cacao y frijol, debido a su representatividad dentro de la base de datos analizada y a la disponibilidad de información para el cálculo de indicadores económicos y productivos. A partir de estos datos, se estimaron variables como ingreso bruto, costo total, margen de ganancia y retorno sobre la inversión, conocido como ROI.
+
+La metodología incluyó análisis descriptivo, cálculo de indicadores de rentabilidad, regresión lineal múltiple y análisis espacial mediante mapas temáticos. Además, se incorporó la variable precipitación como factor agroambiental, con el propósito de evaluar su relación con la rentabilidad agrícola.
+
+Los resultados evidenciaron diferencias importantes entre los cultivos analizados. El café presentó mayor participación en número de productores, área sembrada y producción total, mientras que el cacao mostró los mayores niveles promedio de rentabilidad. El modelo de regresión permitió identificar que la rentabilidad agrícola estuvo asociada principalmente a variables productivas y económicas como producción, precio por kilogramo, área sembrada y costo por hectárea. Por su parte, la precipitación presentó un efecto positivo, aunque no estadísticamente significativo.
+
+Finalmente, el análisis geoespacial permitió representar la distribución de productores, cultivos, producción, área agrícola y rentabilidad promedio por vereda. Asimismo, el Índice de Moran indicó que no existe autocorrelación espacial significativa en la rentabilidad agrícola entre las veredas analizadas.
+
+# Introducción
+
+La agricultura es una de las actividades económicas y productivas más importantes del municipio de La Paz, Cesar. En esta área diferentes sistemas agrícolas colaboran en el mantenimiento económico de las familias rurales y en el uso del suelo fértil. Entre los cultivos que se destacan en el municipio se encuentran el café, el cacao y el frijol, que son significativos tanto por su participación en las unidades productivas como por su función en la economía agrícola local.
+
+El estudio de la rentabilidad agrícola es crucial para entender el comportamiento económico de los sistemas productivos. No solo es relevante saber cuánto produce un cultivo, sino que también es esencial evaluar los ingresos generados, los costos asociados y las ganancias obtenidas por cada unidad de inversión. En este contexto, indicadores como el margen de ganancia y el retorno de la inversión permiten medir la eficiencia económica de los cultivos.
+
+Aparte de los aspectos económicos, la agricultura también está afecta por condiciones de producción y agroambientales. Factores como la superficie sembrada, la producción, el precio de venta, los costos de producción y la precipitación pueden influir en la rentabilidad de los cultivos. Por lo tanto, este estudio utiliza herramientas estadísticas para examinar la relación entre estas variables y la rentabilidad agrícola.
+
+Además, el uso de herramientas geoespaciales facilita la representación territorial de la información agrícola, permitiendo identificar áreas con mayor concentración de productores, cultivos predominantes, niveles de producción y rentabilidad promedio. Esta visión espacial es relevante porque la distribución de la agricultura no es uniforme en el territorio, sino que responde a condiciones económicas, ambientales y productivas específicas de cada vereda.
+
+En este marco, el presente trabajo de grado investiga la rentabilidad de los sistemas agrícolas del municipio de La Paz, Cesar, a través de herramientas estadísticas y geoespaciales, con un enfoque en los cultivos de café, cacao y frijol. El estudio tiene como objetivo proporcionar información valiosa para entender la dinámica productiva del municipio y apoyar la toma de decisiones relacionadas con el desarrollo agrícola local.
+
+# Planteamiento del problema
+
+En el municipio de La Paz, Cesar, se da lugar a un proceso agrícola significativo, que es practicado fundamentalmente en sus veredas y que está estrechamente ligado al cultivo del café, cacao y frijol. Estos sistemas de producción son una fuente de ingresos en el proceso de subsistencia de los productores rurales, no obstante, no siempre se tiene claridad respecto de cuáles son los cultivos que representan una mayor rentabilidad, ni se conocen las causas de su rentabilidad.
+
+La rentabilidad agrícola no depende de las producciones obtenidas, también depende de la superficie sembrada, de los costos, del precio de venta y de la situación agroambiental; la precipitación como una de esas condiciones. Razón por la cual un cultivo con alta producción no es igual a un cultivo con alta rentabilidad si hay una alta percepción de los costos o, por el contrario, un bajo precio de venta.
+
+También la actividad agrícola presenta diferencias territoriales en función de la vereda que se considera, diferencia que está dada a partir de la distribución de productores, cultivos, producción, área sembrada y rentabilidad. Por lo tanto, se hace necesario intercalar herramientas estadísticas y geoespaciales que permitan llevar a cabo un análisis de correlación a partir de variables productivas, económicas y agroambientales, así como presentar la relación espacial de los resultados agrícolas. sistemas de producciones agrícolas del municipio de La Paz, Cesar, con la idea de presentar información útil para conocer la dinámica del proceso agrícola local y para la toma de decisiones en el sector rural.
+
+# Justificacion
+
+El municipio de La Paz, Cesar, presenta una estructura productiva eminentemente agrícola, en la cual predominan cultivos tradicionales manejados por pequeños productores. Sin embargo, no todos los sistemas de cultivo generan los mismos beneficios económicos, y en muchos casos los agricultores desconocen cuáles son realmente rentables o sostenibles a largo plazo. Esta situación dificulta la inversión eficiente de recursos y limita el desarrollo del sector rural. El análisis de la rentabilidad agrícola permite determinar la eficiencia económica de cada cultivo, identificando cuáles generan mayores beneficios en relación con sus costos de producción. A su vez, el uso de herramientas estadísticas y geoespaciales posibilita un enfoque integral del territorio, al vincular variables económicas, productivas y ambientales para comprender cómo los factores agroecológicos influyen en los resultados productivos.
+
+# Objetivos
+
+## Objetivo general
+
+Analizar la rentabilidad de los sistemas agrícolas del municipio de La Paz, Cesar, mediante el uso de herramientas estadísticas y geoespaciales.
+
+## Objetivos específicos
+
+-   Identificar y caracterizar los principales cultivos y sistemas agrícolas presentes en el municipio de La Paz, Cesar, recopilando información productiva, económica y espacial proveniente de fuentes institucionales y bases de datos públicas.
+
+-   Analizar la relación entre variables agroambientales y productivas, evaluando cómo factores como precipitación, tipo de suelo y disponibilidad de recursos influyen en la productividad y rentabilidad agrícola.
+
+-   Elaborar mapas temáticos y análisis espaciales que representen la distribución de los cultivos y los niveles de rentabilidad, identificando zonas críticas y áreas con potencial productivo.
+
+# Metodología
+
+## Enfoque metodológico
+
+El presente estudio se desarrolló bajo un enfoque cuantitativo, descriptivo, estadístico y geoespacial. Se emplearon datos productivos, económicos, agroambientales y espaciales con el propósito de analizar la rentabilidad agrícola de los principales sistemas productivos del municipio de La Paz, Cesar.
+
+El análisis se centró en los cultivos de café, cacao y frijol, debido a su representatividad dentro de la base de datos agrícola disponible y a la existencia de información suficiente para el cálculo de indicadores de productividad, costos, ingresos y rentabilidad. A partir de esta información se realizaron análisis descriptivos, cálculo de indicadores económicos, modelos de regresión y representaciones cartográficas por vereda.
+
+## Área de estudio
+
+El área de estudio corresponde al municipio de La Paz, ubicado en el departamento del Cesar, Colombia. Este municipio presenta una importante actividad agrícola, distribuida en diferentes veredas y asociada a diversos sistemas productivos. Dentro de los cultivos identificados se destacan el café, el cacao y el frijol, los cuales fueron seleccionados para el análisis debido a su importancia productiva y disponibilidad de información.
+
+## Fuente de información
+
+La información utilizada en el estudio provino de la Oficina de UMATA, Control Ambiental y Gestión del Riesgo del municipio de La Paz, Cesar, correspondiente al año 2024. Esta base de datos contenía información productiva, económica y espacial de productores agrícolas registrados en diferentes veredas del municipio.
+
+Inicialmente se identificaron diversas líneas productivas agrícolas. Sin embargo, para el desarrollo del análisis estadístico y geoespacial se seleccionaron los cultivos de café, cacao y frijol, debido a que concentraron la mayor cantidad de productores dentro de la base analizada y contaban con información suficiente para el cálculo de indicadores de productividad y rentabilidad. En total, se trabajó con 301 productores agrícolas distribuidos en estos tres cultivos.
+
+Las principales variables utilizadas fueron: vereda, cultivo, área sembrada en hectáreas, producción en kilogramos, precio por kilogramo, costo por hectárea, ingreso bruto, costo total, margen de ganancia y retorno sobre la inversión.
+
+## Costos de producción
+
+Los costos de producción por hectárea fueron estimados a partir de entrevistas directas y apoyo de productores agrícolas del municipio de La Paz, Cesar. Para cada cultivo se consideraron actividades relacionadas con la preparación del terreno, siembra, fertilización, control fitosanitario, mano de obra, cosecha y poscosecha.
+
+Estos costos fueron ajustados al contexto agrícola del año 2024 y se utilizaron para calcular el costo total de producción de cada unidad productiva. El costo total se obtuvo multiplicando el área sembrada por el costo promedio por hectárea correspondiente a cada cultivo.
+
+## Variable agroambiental: precipitación
+
+Para incorporar el componente agroambiental dentro del análisis, se utilizó la precipitación como variable climática asociada al municipio de La Paz, Cesar. Esta información fue obtenida de la plataforma NASA POWER para el año 2024, utilizando datos de precipitación corregida.
+
+Los datos diarios de precipitación fueron organizados y posteriormente agregados a escala mensual. Para los cultivos permanentes, como café y cacao, se consideró la precipitación acumulada anual. Para el cultivo transitorio de frijol, se tomó la precipitación acumulada correspondiente a su ciclo productivo definido dentro del análisis.
+
+La precipitación fue incluida en el modelo de regresión con el propósito de evaluar su relación con la rentabilidad agrícola, medida a través del ROI.
+
+## Análisis geoespacial
+
+El análisis geoespacial se desarrolló a escala de vereda, utilizando shapefiles veredales del municipio de La Paz, Cesar. A partir de esta información espacial se elaboraron mapas temáticos relacionados con la distribución de productores, cultivo predominante, producción promedio, área agrícola y rentabilidad promedio por vereda.
+
+Este componente permitió representar territorialmente los resultados del análisis agrícola y observar diferencias espaciales en la actividad productiva del municipio. Además, facilitó la identificación de zonas con mayor concentración de productores, mayor producción agrícola y distintos niveles de rentabilidad.
+
+## Autocorrelación espacial
+
+Para evaluar la existencia de patrones espaciales en la rentabilidad agrícola se aplicó el Índice de Moran global, utilizando la rentabilidad promedio por vereda. Este índice permitió analizar si las veredas cercanas presentaban valores similares de rentabilidad o si, por el contrario, la distribución espacial de la rentabilidad era aleatoria.
+
+Las hipótesis planteadas fueron: $$
+H_0: \text{No existe autocorrelación espacial significativa en la rentabilidad agrícola por vereda}
+$$
+
+$$
+H_1: \text{Existe autocorrelación espacial significativa en la rentabilidad agrícola por vereda}
+$$
+
+Si el p-valor es menor a 0.05, se rechaza la hipótesis nula. Si el p-valor es mayor a 0.05, no se rechaza la hipótesis nula.
+
+# Resultados y análisis
+
+## Caracterización de los cultivos analizados
+
+```{r pressure1, include=FALSE}
+
+library(readxl)
+library(dplyr)
+library(ggplot2)
+library(dplyr)
+library(knitr)
+
+```
+
+```{r pressure2, include=FALSE}
+
+
+
+corrver <- read_excel("C:/Users/hp122/Downloads/corrver.xlsx")
+
+productos_a <- read_excel("C:/Users/hp122/Downloads/productos_a.xlsx")
+
+rend <- read.csv("C:/Users/hp122/Downloads/rend - Hoja 1 (2).csv")
+table(rend$CULTIVO)
+
+```
+
+```{r pressure6, echo=FALSE}
+
+# Cargar correctamente archivo NASA POWER
+
+archivo <- "C:/Users/hp122/Downloads/POWER_Point_Daily_20240101_20241231_010d38N_073d17W_LST.csv"
+
+# Leer todas las líneas
+lineas <- readLines(archivo)
+
+# Buscar dónde empiezan los datos reales
+inicio <- grep("^YEAR,DOY,PRECTOTCORR", lineas)
+
+# Importar desde la fila correcta
+precipitacion <- read.csv(
+  archivo,
+  skip = inicio - 1,
+  header = TRUE
+)
+
+# Crear fecha real
+precipitacion$fecha <- as.Date(precipitacion$DOY - 1, origin = "2024-01-01")
+
+# Crear mes
+precipitacion$mes <- format(precipitacion$fecha, "%m")
+
+# Precipitación mensual
+precipitacion_mensual <- aggregate(
+  PRECTOTCORR ~ mes,
+  data = precipitacion,
+  sum
+)
+
+
+
+precipitacion_anual <- sum(precipitacion$PRECTOTCORR)
+
+
+precipitacion_mensual <- aggregate(
+  PRECTOTCORR ~ mes,
+  data = precipitacion,
+  sum
+)
+
+
+
+precipitacion_mensual$mes_nombre <- month.name[as.numeric(precipitacion_mensual$mes)]
+
+
+
+precipitacion_anual <- sum(precipitacion$PRECTOTCORR)
+
+
+
+write.csv(
+  precipitacion_mensual,
+  "precipitacion_mensual_LaPaz_2024.csv",
+  row.names = FALSE
+)
+
+
+```
+
+
+La base de datos agrícola del municipio de La Paz, Cesar, permitió identificar diferentes líneas productivas presentes en el territorio. Entre ellas se encontraron cultivos como café, cacao, frijol, yuca, cilantro, plátano, lulo, maíz, tomate, aguacate, ahuyama, entre otros.
+
+La distribución de las unidades productivas evidenció que el café fue la línea productiva con mayor participación dentro de la base analizada, seguido por el cacao y el frijol. Este resultado permitió reconocer la importancia de estos cultivos dentro de la estructura agrícola del municipio.
+
+```{r tabla-resultados, echo=FALSE, warning=FALSE, message=FALSE}
+kable(productos_a)
+
+```
+
+El cultivo de café presentó la mayor participación dentro de los sistemas agrícolas analizados, concentrando el mayor número de productores del municipio.
+
+```{r pressure31, echo=FALSE}
+
+
+
+kable(corrver)
+
+```
+
+```{r pressure51, echo=FALSE}
+
+library(dplyr)
+library(ggplot2)
+
+corrver <- corrver %>%
+  mutate(porcentaje = `PRODUCTORES AGROPECUARIOS` / sum(`PRODUCTORES AGROPECUARIOS`) * 100) %>%
+  arrange(desc(`PRODUCTORES AGROPECUARIOS`))
+
+ggplot(corrver, aes(x = reorder(`CORREGIMIENTOS Y VEREDAS`, `PRODUCTORES AGROPECUARIOS`),
+                    y = `PRODUCTORES AGROPECUARIOS`)) +
+  geom_col(fill = "steelblue") +
+  coord_flip() +
+  geom_text(aes(label = paste0(round(porcentaje, 1), "%")),
+            hjust = -0.1,
+            size = 3) +
+  labs(
+    title = "Distribución de productores agricolas por vereda",
+    x = "Veredas",
+    y = "Número de productores"
+  ) +
+  theme_minimal()
+```
+
+## Selección de cultivos analizados
+
+A partir de la caracterización inicial, se seleccionaron los cultivos de café, cacao y frijol para el desarrollo del análisis estadístico y geoespacial. Esta selección se realizó porque estos cultivos concentraron la mayor cantidad de productores y contaban con información suficiente sobre área sembrada, producción, precio, costos y ubicación espacial.
+
+En total, se trabajó con 301 productores agrícolas, distribuidos en 169 productores de café, 72 productores de cacao y 60 productores de frijol.
+
+## Producción y área sembrada por cultivo
+
+El análisis de la producción total mostró que el café presentó el mayor volumen producido entre los cultivos analizados. Este comportamiento se relaciona con su mayor número de productores y con su predominancia territorial dentro de la base agrícola.
+
+De igual manera, el café presentó la mayor área sembrada total, lo cual confirma su importancia dentro del sistema agrícola del municipio. Sin embargo, una mayor producción o una mayor área sembrada no necesariamente implica mayor rentabilidad, debido a que esta también depende de los precios de venta y de los costos de producción.
+
+```{r pressure32, echo=FALSE}
+library(ggplot2)
+library(scales)
+
+produccion_cultivo <- aggregate(PRODUCCION_KG ~ CULTIVO,
+                                data = rend,
+                                sum)
+
+ggplot(produccion_cultivo,
+       aes(x = CULTIVO,
+           y = PRODUCCION_KG,
+           fill = CULTIVO)) +
+
+  geom_bar(stat = "identity",
+           width = 0.7,
+           color = "black") +
+
+  labs(title = "Producción total por cultivo",
+       x = "Cultivo",
+       y = "Producción total (kg)") +
+
+  scale_fill_manual(values = c("brown3",
+                               "darkgreen",
+                               "goldenrod2")) +
+
+  scale_y_continuous(labels = comma) +
+
+  theme_minimal(base_size = 14) +
+
+  theme(
+    plot.title = element_text(hjust = 0.5,
+                              face = "bold",
+                              size = 16),
+
+    axis.title = element_text(face = "bold"),
+
+    legend.position = "none",
+
+    # CUADRO EXTERNO
+    panel.border = element_rect(
+      color = "gray40",
+      fill = NA,
+      linewidth = 1
+    ),
+
+    # fondo blanco
+    plot.background = element_rect(
+      fill = "white",
+      color = NA
+    )
+  )
+
+```
+
+```{r pressure33, echo=FALSE}
+library(ggplot2)
+library(scales)
+
+area_cultivo <- aggregate(AREA_HA ~ CULTIVO,
+                          data = rend,
+                          sum)
+
+ggplot(area_cultivo,
+       aes(x = CULTIVO,
+           y = AREA_HA,
+           fill = CULTIVO)) +
+
+  geom_bar(stat = "identity",
+           width = 0.7,
+           color = "black") +
+
+  labs(title = "Área sembrada total por cultivo",
+       x = "Cultivo",
+       y = "Área total (ha)") +
+
+  scale_fill_manual(values = c("brown3",
+                               "darkgreen",
+                               "goldenrod2")) +
+
+  scale_y_continuous(labels = comma) +
+
+  theme_minimal(base_size = 14) +
+
+  theme(
+    plot.title = element_text(hjust = 0.5,
+                              face = "bold",
+                              size = 16),
+
+    axis.title = element_text(face = "bold"),
+
+    legend.position = "none",
+
+    panel.border = element_rect(
+      color = "gray40",
+      fill = NA,
+      linewidth = 1
+    ),
+
+    plot.background = element_rect(
+      fill = "white",
+      color = NA
+    )
+  )
+```
+
+## Distribución de la producción agrícola
+
+La distribución de la producción agrícola presentó una asimetría positiva. Esto indica que la mayoría de los productores registraron niveles bajos o moderados de producción, mientras que un grupo reducido concentró los valores productivos más altos.
+
+Este resultado evidencia heterogeneidad entre los productores analizados, lo cual puede estar asociado a diferencias en área sembrada, manejo agronómico, acceso a recursos, condiciones del cultivo y características propias de cada unidad productiva.
+
+```{r pressure34, echo=FALSE}
+library(ggplot2)
+library(scales)
+
+ggplot(rend,
+       aes(x = PRODUCCION_KG)) +
+
+  geom_histogram(
+    bins = 15,
+    fill = "darkgreen",
+    color = "black",
+    alpha = 0.9
+  ) +
+
+  labs(
+    title = "Distribución de la producción agrícola",
+    x = "Producción (kg)",
+    y = "Frecuencia"
+  ) +
+
+  scale_x_continuous(labels = comma) +
+
+  theme_minimal(base_size = 14) +
+
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 16
+    ),
+
+    axis.title = element_text(face = "bold"),
+
+    panel.border = element_rect(
+      color = "gray40",
+      fill = NA,
+      linewidth = 1
+    ),
+
+    plot.background = element_rect(
+      fill = "white",
+      color = NA
+    )
+  )
+```
+
+```{r pressure35, echo=FALSE}
+library(ggplot2)
+library(scales)
+
+ggplot(rend,
+       aes(x = CULTIVO,
+           y = PRODUCCION_KG,
+           fill = CULTIVO)) +
+
+  geom_boxplot(
+    width = 0.6,
+    color = "black",
+    outlier.color = "black",
+    outlier.size = 2
+  ) +
+
+  labs(title = "Producción por cultivo",
+       x = "Cultivo",
+       y = "Producción (kg)") +
+
+  scale_fill_manual(values = c("brown3",
+                               "darkgreen",
+                               "goldenrod2")) +
+
+  scale_y_continuous(labels = label_number(big.mark = ".")) +
+
+  theme_minimal(base_size = 14) +
+
+  theme(
+    plot.title = element_text(hjust = 0.5,
+                              face = "bold",
+                              size = 16),
+
+    axis.title = element_text(face = "bold"),
+
+    legend.position = "none",
+
+    panel.border = element_rect(
+      color = "gray40",
+      fill = NA,
+      linewidth = 1
+    ),
+
+    plot.background = element_rect(
+      fill = "white",
+      color = NA
+    )
+  )
+```
+
+## Cálculo de indicadores de rentabilidad
+
+Para evaluar la rentabilidad agrícola se calcularon los indicadores de ingreso bruto, costo total, margen de ganancia y retorno sobre la inversión, conocido como ROI.
+
+El ingreso bruto se calculó multiplicando la producción por el precio de venta por kilogramo. El costo total se obtuvo multiplicando el área sembrada por el costo promedio por hectárea. Posteriormente, el margen de ganancia se calculó como la diferencia entre el ingreso bruto y el costo total.
+
+El ROI fue utilizado como indicador principal de rentabilidad, ya que permite medir la ganancia obtenida en relación con los costos de producción. De esta manera, un ROI positivo indica que el productor obtuvo utilidad, mientras que un ROI negativo indicaría pérdida.
+
+## Fórmulas utilizadas
+
+El ingreso bruto se calculó mediante la siguiente expresión:
+
+\[
+Ingreso\ Bruto = Producción\ (kg) \times Precio\ (\$/kg)
+\]
+
+
+El costo total de producción se estimó a partir del área sembrada y el costo promedio por hectárea:
+
+\[
+Costo\ Total = Área\ (ha) \times Costo\ por\ hectárea
+\]
+
+
+El margen de ganancia se calculó como la diferencia entre el ingreso bruto y el costo total:
+
+\[
+Margen = Ingreso\ Bruto - Costo\ Total
+\]
+
+
+La rentabilidad agrícola se evaluó mediante el retorno sobre la inversión:
+
+\[
+ROI = \frac{Ingreso\ Bruto - Costo\ Total}{Costo\ Total}
+\]
+Para expresarlo en porcentaje:
+\[
+ROI(\%) = ROI \times 100
+\]
+
+```{r pressure36, echo=FALSE}
+rend$INGRESO_BRUTO <- rend$PRODUCCION_KG * rend$PRECIO_KG
+```
+
+```{r pressure37, echo=FALSE}
+rend$COSTO_TOTAL <- rend$AREA_HA * rend$COSTO_HA
+```
+
+```{r pressure38, echo=FALSE}
+rend$MARGEN <- rend$INGRESO_BRUTO - rend$COSTO_TOTAL
+```
+
+```{r pressure39, echo=FALSE}
+rend$ROI <- (rend$INGRESO_BRUTO - rend$COSTO_TOTAL) / rend$COSTO_TOTAL
+```
+
+## Rentabilidad agrícola por cultivo
+
+El análisis de rentabilidad mostró diferencias importantes entre los cultivos de café, cacao y frijol. El cacao presentó el mayor nivel promedio de rentabilidad, seguido por el frijol y luego el café.
+
+Este resultado muestra que el cultivo con mayor producción no necesariamente fue el más rentable. Aunque el café presentó mayor producción y mayor área sembrada, el cacao obtuvo mejores resultados económicos en términos de ROI. Esto puede estar relacionado con mejores precios de venta y una relación más favorable entre ingresos y costos.
+
+```{r pressure11, echo=FALSE}
+library(ggplot2)
+
+ggplot(rend,
+       aes(x = CULTIVO,
+           y = ROI,
+           fill = CULTIVO)) +
+
+  geom_boxplot(
+    width = 0.6,
+    color = "black",
+    outlier.color = "black",
+    outlier.size = 2
+  ) +
+
+  labs(title = "Rentabilidad (ROI) por cultivo",
+       x = "Cultivo",
+       y = "ROI") +
+
+  scale_fill_manual(values = c("brown3",
+                               "darkgreen",
+                               "goldenrod2")) +
+
+  theme_minimal(base_size = 14) +
+
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 16
+    ),
+
+    axis.title = element_text(face = "bold"),
+
+    legend.position = "none",
+
+    panel.border = element_rect(
+      color = "gray40",
+      fill = NA,
+      linewidth = 1
+    ),
+
+    plot.background = element_rect(
+      fill = "white",
+      color = NA
+    )
+  )
+```
+
+```{r pressure12, echo=FALSE}
+library(ggplot2)
+
+ggplot(rend,
+       aes(x = ROI)) +
+
+  geom_histogram(
+    bins = 15,
+    fill = "darkgreen",
+    color = "black",
+    alpha = 0.9
+  ) +
+
+  labs(title = "Distribución de la rentabilidad (ROI)",
+       x = "ROI",
+       y = "Frecuencia") +
+
+  theme_minimal(base_size = 14) +
+
+  theme(
+    plot.title = element_text(
+      hjust = 0.5,
+      face = "bold",
+      size = 16
+    ),
+
+    axis.title = element_text(face = "bold"),
+
+    panel.border = element_rect(
+      color = "gray40",
+      fill = NA,
+      linewidth = 1
+    ),
+
+    plot.background = element_rect(
+      fill = "white",
+      color = NA
+    )
+  )
+```
+
+```{r pressure113, echo=FALSE}
+tabla_resumen <- aggregate(
+  cbind(AREA_HA,
+        PRODUCCION_KG,
+        PRECIO_KG,
+        ROI) ~ CULTIVO,
+  data = rend,
+  mean
+)
+
+
+tabla_indicadores <- data.frame(
+  Cultivo = c("Cacao", "Café", "Frijol"),
+  `Área promedio (ha)` = c(2.47, 2.97, 2.07),
+  `Producción promedio (kg)` = c(1224.17, 2698.17, 1671.67),
+  `Precio promedio ($/kg)` = c(21498.61, 8721.89, 4273.33),
+  `ROI promedio` = c(5.36, 1.01, 1.56)
+)
+
+kable(
+  tabla_indicadores,
+  caption = "Indicadores promedio por cultivo",
+  align = "c",
+  digits = 2
+) 
+```
+
+## Relación entre variables agroambientales, productivas y económicas
+
+Para dar cumplimiento al segundo objetivo específico, se incorporó la precipitación como variable agroambiental dentro del análisis. La precipitación fue obtenida para el año 2024 y organizada según los cultivos analizados.
+
+Para café y cacao, al tratarse de cultivos permanentes, se utilizó la precipitación acumulada anual. Para frijol, por ser un cultivo transitorio, se utilizó la precipitación acumulada correspondiente al ciclo productivo definido en el análisis.
+
+Esta variable fue integrada con las variables productivas y económicas de la base de datos, con el fin de analizar su relación con la rentabilidad agrícola medida mediante el ROI.
+
+## Modelo de regresión múltiple para la rentabilidad agrícola
+
+Con el propósito de analizar la relación entre variables agroambientales, productivas y económicas con la rentabilidad agrícola, se estimó un modelo de regresión lineal múltiple. La variable dependiente fue el ROI, utilizado como indicador de rentabilidad, mientras que las variables explicativas fueron la precipitación acumulada, el área sembrada, la producción en kilogramos, el precio por kilogramo y el costo por hectárea.
+
+El modelo estimado fue:
+
+$$
+ROI_i = \beta_0 + \beta_1 Precipitación_i + \beta_2 Área_i + \beta_3 Producción_i + \beta_4 Precio_i + \beta_5 Costo_i + \varepsilon_i
+$$
+
+Las hipótesis del modelo de regresión múltiple fueron:
+
+\[
+\left\{
+\begin{array}{ll}
+H_0: & \beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5 = 0 \\[6pt]
+H_1: & \text{Al menos un } \beta_j \neq 0,\quad j = 1,2,3,4,5
+\end{array}
+\right.
+\]
+
+Bajo estas hipótesis, si el p-valor del modelo es menor a 0.05, se rechaza la hipótesis nula y se concluye que al menos una de las variables incluidas tiene relación estadísticamente significativa con la rentabilidad agrícola.
+
+```{r precipitacion-cultivos, include=FALSE}
+# Asegurar nombres de cultivos en mayúscula
+rend$CULTIVO <- toupper(rend$CULTIVO)
+
+# Preparar precipitación mensual
+precipitacion_reg <- precipitacion_mensual
+colnames(precipitacion_reg) <- c("mes", "precipitacion_mm", "mes_nombre")
+precipitacion_reg$mes <- as.numeric(precipitacion_reg$mes)
+
+# Crear calendario de cultivos
+calendario_cultivo <- data.frame(
+  CULTIVO = c("CAFE", "CACAO", "FRIJOL"),
+  mes_inicio = c(1, 1, 4),
+  mes_fin = c(12, 12, 6)
+)
+
+# Calcular precipitación acumulada por cultivo
+calendario_cultivo$PRECIPITACION_MM <- NA
+
+for(i in 1:nrow(calendario_cultivo)) {
+  
+  meses_ciclo <- calendario_cultivo$mes_inicio[i]:calendario_cultivo$mes_fin[i]
+  
+  calendario_cultivo$PRECIPITACION_MM[i] <- sum(
+    precipitacion_reg$precipitacion_mm[precipitacion_reg$mes %in% meses_ciclo],
+    na.rm = TRUE
+  )
+}
+
+
+
+datos_regresion <- merge(
+  rend,
+  calendario_cultivo[, c("CULTIVO", "PRECIPITACION_MM")],
+  by = "CULTIVO",
+  all.x = TRUE
+)
+
+
+
+table(datos_regresion$CULTIVO)
+summary(datos_regresion$PRECIPITACION_MM)
+
+modelo_precipitacion_completo <- lm(
+  ROI ~ PRECIPITACION_MM + AREA_HA + PRODUCCION_KG + PRECIO_KG + COSTO_HA,
+  data = datos_regresion
+)
+
+summary(modelo_precipitacion_completo)
+
+```
+
+
+
+Los resultados del modelo de regresión múltiple mostraron que el modelo general fue estadísticamente significativo, con un p-valor menor a 0.05. El R² ajustado fue de 0.5104, lo que indica que las variables incluidas explican aproximadamente el 51% de la variación del ROI.
+
+La precipitación presentó un coeficiente positivo; sin embargo, no fue estadísticamente significativa, dado que su p-valor fue de 0.217. Esto indica que, para los datos analizados, no se encontró evidencia suficiente para afirmar que la precipitación influya directamente sobre la rentabilidad agrícola.
+
+Por otro lado, las variables área sembrada, producción, precio por kilogramo y costo por hectárea sí fueron estadísticamente significativas. La producción y el precio presentaron una relación positiva con el ROI, mientras que el área sembrada y el costo por hectárea presentaron una relación negativa.
+
+
+# Mapas temáticos y análisis geoespacial
+
+El análisis geoespacial permitió representar la distribución territorial de la actividad agrícola en el municipio de La Paz, Cesar. Los mapas fueron elaborados a escala de vereda y permitieron visualizar diferencias espaciales en la concentración de productores, el cultivo predominante, la producción promedio, el área agrícola y la rentabilidad promedio.
+
+El mapa de productores agrícolas por vereda permitió identificar las zonas con mayor concentración de actividad productiva. Por su parte, el mapa de cultivo predominante mostró la especialización agrícola de cada vereda en café, cacao o frijol.
+
+El mapa de rentabilidad promedio permitió reconocer zonas con mayores niveles de rentabilidad agrícola, mientras que los mapas de producción promedio y área agrícola facilitaron la identificación de veredas con mayor desempeño productivo y mayor superficie cultivada.
+
+## Mapa de productores agrícolas por vereda
+
+Con el fin de identificar la distribución espacial de la actividad agrícola en el municipio de La Paz, Cesar, se elaboró un mapa temático que representa la cantidad de productores agrícolas registrados por vereda. Este análisis permitió reconocer las zonas con mayor concentración de actividad productiva dentro del territorio.
+
+```{r pressure9, include = FALSE}
+library(sf)
+
+veredas <- st_read("C:/Users/hp122/Downloads/shapefile_lapaz/veredas_con_datos.shp")
+unique(veredas$vereda)
+
+sort(unique(veredas$vereda))
+```
+
+```{r pressure16, echo=FALSE}
+productores_vereda <- as.data.frame(table(rend$VEREDA))
+
+colnames(productores_vereda) <- c("vereda", "productores")
+```
+
+```{r pressure17, echo=FALSE}
+mapa_productores <- merge(veredas,
+                          productores_vereda,
+                          by = "vereda",
+                          all.x = TRUE)
+
+library(leaflet)
+
+leaflet(mapa_productores) %>%
+  addTiles() %>%
+  
+  addPolygons(
+    fillColor = ~colorNumeric("YlGn", productores)(productores),
+    color = "black",
+    weight = 1,
+    fillOpacity = 0.7,
+    
+    popup = paste(
+      "<strong>Vereda:</strong>", mapa_productores$vereda,
+      "<br><strong>Productores:</strong>", mapa_productores$productores
+    )
+  )
+
+```
+
+## Mapa de cultivo predominante por vereda
+
+Se construyó un mapa de cultivo predominante para representar espacialmente el sistema agrícola dominante en cada vereda, considerando los cultivos de café, cacao y frijol. Este producto permitió visualizar la especialización productiva y las diferencias territoriales entre las unidades espaciales analizadas.
+
+```{r pressure18, echo=FALSE}
+tabla_cultivo <- as.data.frame(table(rend$VEREDA, rend$CULTIVO))
+
+colnames(tabla_cultivo) <- c("vereda", "cultivo", "productores")
+
+library(dplyr)
+
+dominante_vereda <- tabla_cultivo %>%
+  group_by(vereda) %>%
+  slice_max(productores, n = 1, with_ties = FALSE) %>%
+  ungroup()
+
+mapa_dominante <- merge(veredas,
+                        dominante_vereda,
+                        by = "vereda",
+                        all.x = TRUE)
+
+pal_dom <- colorFactor(
+  palette = c("darkgreen", "brown", "gold"),
+  domain = c("CAFE", "CACAO", "FRIJOL")
+)
+
+leaflet(mapa_dominante) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal_dom(cultivo),
+    color = "black",
+    weight = 1,
+    fillOpacity = 0.7,
+    popup = paste(
+      "<strong>Vereda:</strong>", mapa_dominante$vereda,
+      "<br><strong>Cultivo predominante:</strong>", mapa_dominante$cultivo,
+      "<br><strong>Productores:</strong>", mapa_dominante$productores
+    )
+  ) %>%
+  addLegend(
+    pal = pal_dom,
+    values = ~cultivo,
+    title = "Cultivo predominante"
+  )
+
+```
+
+## Mapa de rentabilidad promedio por vereda
+
+Con el propósito de analizar la intensidad del uso agrícola del suelo, se elaboró un mapa temático basado en el área sembrada total por vereda. Este análisis permitió identificar las zonas con mayor ocupación agrícola y concentración de hectáreas cultivadas.
+
+```{r pressure19, echo=FALSE}
+
+roi_vereda <- aggregate(ROI ~ VEREDA,
+                        data = rend,
+                        mean)
+
+colnames(roi_vereda) <- c("vereda", "roi_promedio")
+
+mapa_roi <- merge(veredas,
+                  roi_vereda,
+                  by = "vereda",
+                  all.x = TRUE)
+pal_roi <- colorNumeric(
+  palette = "YlOrRd",
+  domain = mapa_roi$roi_promedio,
+  na.color = "grey85"
+)
+
+leaflet(mapa_roi) %>%
+  addTiles() %>%
+  addPolygons(
+    fillColor = ~pal_roi(roi_promedio),
+    color = "black",
+    weight = 1,
+    fillOpacity = 0.7,
+    popup = paste(
+      "<strong>Vereda:</strong>", mapa_roi$vereda,
+      "<br><strong>ROI promedio:</strong>", round(mapa_roi$roi_promedio * 100, 2), "%"
+    )
+  ) %>%
+  addLegend(
+    pal = pal_roi,
+    values = ~roi_promedio,
+    title = "ROI promedio"
+  )
+
+```
+
+## Mapa de producción promedio por vereda
+
+Se desarrolló un mapa de producción promedio por vereda, calculado a partir de los registros productivos de los productores analizados. Este producto facilitó la identificación de las zonas con mayor productividad agrícola dentro del municipio.
+
+```{r pressure20, echo=FALSE}
+prod_vereda <- aggregate(PRODUCCION_KG ~ VEREDA,
+                         data = rend,
+                         mean)
+
+colnames(prod_vereda) <- c("vereda", "prod_promedio")
+
+mapa_prod <- merge(veredas,
+                   prod_vereda,
+                   by = "vereda",
+                   all.x = TRUE)
+
+pal_prod <- colorNumeric(
+  palette = "YlGn",
+  domain = mapa_prod$prod_promedio,
+  na.color = "grey85"
+)
+
+leaflet(mapa_prod) %>%
+  addTiles() %>%
+  
+  addPolygons(
+    fillColor = ~pal_prod(prod_promedio),
+    color = "black",
+    weight = 1,
+    fillOpacity = 0.7,
+    
+    popup = paste(
+      "<strong>Vereda:</strong>", mapa_prod$vereda,
+      "<br><strong>Producción promedio:</strong>",
+      round(mapa_prod$prod_promedio, 2), "kg"
+    )
+  ) %>%
+  
+  addLegend(
+    pal = pal_prod,
+    values = ~prod_promedio,
+    title = "Producción promedio"
+  )
+```
+
+## Mapa de área agrícola por vereda
+
+A partir del cálculo del retorno sobre la inversión (ROI), se elaboró un mapa de rentabilidad promedio por vereda. Este análisis permitió identificar zonas con mayores niveles de rentabilidad agrícola, así como áreas críticas con menores niveles de desempeño económico.
+
+```{r pressure111, echo=FALSE}
+area_vereda <- aggregate(AREA_HA ~ VEREDA,
+                         data = rend,
+                         sum)
+
+colnames(area_vereda) <- c("vereda", "area_total")
+
+mapa_area <- merge(veredas,
+                   area_vereda,
+                   by = "vereda",
+                   all.x = TRUE)
+pal_area <- colorNumeric(
+  palette = "Greens",
+  domain = mapa_area$area_total,
+  na.color = "grey85"
+)
+
+leaflet(mapa_area) %>%
+  addTiles() %>%
+  
+  addPolygons(
+    fillColor = ~pal_area(area_total),
+    color = "black",
+    weight = 1,
+    fillOpacity = 0.7,
+    
+    popup = paste(
+      "<strong>Vereda:</strong>", mapa_area$vereda,
+      "<br><strong>Área agrícola:</strong>",
+      round(mapa_area$area_total, 2), "ha"
+    )
+  ) %>%
+  
+  addLegend(
+    pal = pal_area,
+    values = ~area_total,
+    title = "Área agrícola"
+  )
+
+```
+
+
+## Autocorrelación espacial: Índice de Moran
+
+Para evaluar la existencia de autocorrelación espacial en la rentabilidad promedio por vereda, se aplicó el Índice de Moran global:
+
+$$
+I = \frac{n}{S_0}
+\frac{\sum_i \sum_j w_{ij}(x_i-\bar{x})(x_j-\bar{x})}
+{\sum_i (x_i-\bar{x})^2}
+$$
+
+Donde:
+
+-   $I$ es el Índice de Moran.
+-   $n$ es el número de unidades espaciales analizadas.
+-   $x_i$ y $x_j$ son los valores de rentabilidad en las veredas $i$ y $j$.
+-   $\bar{x}$ es el promedio de la rentabilidad.
+-   $w_{ij}$ representa la relación de vecindad entre las veredas.
+-   $S_0$ es la suma total de los pesos espaciales.
+
+Este indicador permite identificar si las veredas con valores similares de rentabilidad tienden a agruparse espacialmente o si la distribución presenta un patrón aleatorio.
+
+
+
+```{r moran-calculo, include=FALSE}
+library(spdep)
+library(sf)
+
+sf_use_s2(FALSE)
+
+mapa_roi_moran <- mapa_roi[!is.na(mapa_roi$roi_promedio), ]
+
+vecinos <- poly2nb(mapa_roi_moran)
+
+pesos <- nb2listw(
+  vecinos,
+  style = "W",
+  zero.policy = TRUE
+)
+
+resultado_moran <- moran.test(
+  mapa_roi_moran$roi_promedio,
+  pesos,
+  zero.policy = TRUE
+)
+
+
+```
+
+```{r tabla-moran, echo=FALSE, warning=FALSE, message=FALSE}
+tabla_moran <- data.frame(
+  Indicador = c(
+    "Índice de Moran",
+    "p-valor",
+    "Decisión estadística",
+    "Interpretación"
+  ),
+  Resultado = c(
+    round(resultado_moran$estimate[["Moran I statistic"]], 4),
+    round(resultado_moran$p.value, 4),
+    "No se rechaza H₀",
+    "No existe autocorrelación espacial significativa"
+  )
+)
+
+knitr::kable(
+  tabla_moran,
+  caption = "Resultado del Índice de Moran global",
+  align = "c"
+)
+
+```
+El resultado obtenido presentó un Índice de Moran positivo bajo y un p-valor mayor a 0.05. Por esta razón, no se rechaza la hipótesis nula. Esto indica que no existe evidencia estadística suficiente para afirmar que la rentabilidad agrícola esté agrupada espacialmente entre las veredas analizadas.
+
+En otras palabras, las veredas con rentabilidades altas o bajas no mostraron un patrón espacial significativo de concentración.
+
+
+# Conclusiones
+
+El análisis permitió identificar que el café fue el cultivo con mayor participación dentro de la base agrícola del municipio de La Paz, Cesar. Este cultivo concentró la mayor cantidad de productores, la mayor área sembrada y la mayor producción total entre los sistemas agrícolas analizados.
+
+Aunque el café presentó los mayores niveles de producción y área sembrada, el cacao fue el cultivo con mayor rentabilidad promedio. Esto evidencia que un mayor volumen de producción no necesariamente implica una mayor rentabilidad, ya que los resultados económicos también dependen del precio de venta, los costos de producción y el margen de ganancia.
+
+El ROI permitió evaluar la rentabilidad agrícola de manera comparativa entre los cultivos de café, cacao y frijol. Este indicador mostró que el cacao presentó una relación más favorable entre ingresos y costos, seguido por el frijol y posteriormente el café.
+
+El modelo de regresión múltiple permitió analizar la relación entre la rentabilidad agrícola y variables agroambientales, productivas y económicas. Los resultados indicaron que el modelo general fue estadísticamente significativo y explicó aproximadamente el 51% de la variación del ROI.
+
+Las variables producción, precio por kilogramo, área sembrada y costo por hectárea presentaron una relación significativa con la rentabilidad agrícola. La producción y el precio tuvieron un efecto positivo sobre el ROI, mientras que el área sembrada y el costo por hectárea presentaron un efecto negativo.
+
+La precipitación fue incorporada como variable agroambiental dentro del análisis. Aunque presentó un efecto positivo sobre el ROI, no fue estadísticamente significativa, por lo que no se encontró evidencia suficiente para afirmar que influyera directamente en la rentabilidad agrícola de los cultivos analizados.
+
+El análisis geoespacial permitió representar la distribución territorial de los productores, los cultivos predominantes, la producción, el área agrícola y la rentabilidad promedio por vereda. Estos mapas facilitaron la identificación de diferencias espaciales en la actividad agrícola del municipio.
+
+El Índice de Moran mostró un valor positivo bajo y un p-valor mayor a 0.05, por lo cual no se rechazó la hipótesis nula. Esto indica que no se encontró autocorrelación espacial significativa en la rentabilidad agrícola entre las veredas analizadas.
+
+En términos generales, la rentabilidad agrícola en el municipio de La Paz, Cesar, estuvo más asociada a factores productivos y económicos que a la precipitación. Por tanto, los resultados resaltan la importancia de fortalecer la gestión de costos, los precios de comercialización y la productividad para mejorar el desempeño económico de los sistemas agrícolas locales.
+
+# Referencias
+
+Oficina de UMATA, Control Ambiental y Gestión del Riesgo del municipio de La Paz, Cesar. (2024). *Base de datos de productores agrícolas, información productiva, económica y espacial utilizada en el estudio*.
+
+Productores agrícolas del municipio de La Paz, Cesar. (2024). *Entrevistas para la estimación de costos de producción por hectárea en los cultivos de café, cacao y frijol*.
+
+NASA POWER. (2024). *Datos de precipitación corregida para el municipio de La Paz, Cesar*. National Aeronautics and Space Administration.
+
+ISAGRI. (s. f.). *El ROI: cifra clave para analizar la rentabilidad de tu explotación*. Consultado como referencia para la definición y cálculo del indicador ROI.
+
+El Tiempo. (2024). *Precios del cacao tienen a productores contentos, pequeñas empresas pensando en cerrar y consumidores pagando más*. Consultado como referencia del comportamiento de los precios del cacao durante el año 2024.
+
+R Core Team. (2024). *R: A language and environment for statistical computing*. R Foundation for Statistical Computing.
+
+RStudio Team. (2024). *RStudio: Integrated Development Environment for R*. Posit Software.
+
+OpenStreetMap contributors. (2024). *OpenStreetMap*. Utilizado como mapa base para la visualización geoespacial.
+
+Hijmans, R. J., Pebesma, E., Bivand, R., & otros desarrolladores de paquetes espaciales en R. (2024). *Paquetes de R utilizados para análisis estadístico y geoespacial: sf, leaflet, ggplot2 y spdep*.
+

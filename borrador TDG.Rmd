@@ -210,7 +210,9 @@ La Figura presenta la distribución de las unidades productivas por línea produ
 library(sf)
 
 veredas <- st_read("C:/Users/hp122/Downloads/shapefile_lapaz/veredas_con_datos.shp")
+unique(veredas$vereda)
 
+sort(unique(veredas$vereda))
 ```
 
 ## Distribución espacial de productores agrícolas por vereda
@@ -223,7 +225,6 @@ El siguiente mapa representa la distribución espacial de los productores agríc
 library(readxl)
 corrver <- read_excel("C:/Users/hp122/Downloads/corrver.xlsx")
 names(corrver) <- c("vereda", "productores")
-
 
 ```
 
