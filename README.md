@@ -1,10 +1,56 @@
-# Análisis agrícola en La Paz, Cesar
+# Análisis estadístico y geoespacial de la rentabilidad agrícola en el municipio de La Paz, Cesar
 
-Este repositorio contiene el código, las bases de datos y el documento HTML del trabajo de grado titulado:
+**Autor:** Nedilson Pushaina Ramírez
+**Universidad:** Universidad Nacional de Colombia – Sede de La Paz
+**Programa:** Estadística
+**Tipo de documento:** Trabajo de grado
+**Año de análisis:** 2024
 
-**Análisis estadístico y geoespacial de la rentabilidad agrícola en el municipio de La Paz, Cesar**
+---
 
-El proyecto fue desarrollado en **R y RStudio** mediante un archivo principal en formato **R Markdown**. El análisis incluye procesamiento de bases agrícolas, cálculo de indicadores de rentabilidad, análisis de precipitación, modelos estadísticos y mapas interactivos.
+## Descripción general
+
+Este repositorio contiene el desarrollo del trabajo de grado titulado **“Análisis estadístico y geoespacial de la rentabilidad agrícola en el municipio de La Paz, Cesar”**.
+
+El proyecto fue desarrollado en **R y RStudio** mediante un archivo principal en formato **R Markdown**, donde se integran el procesamiento de bases de datos agrícolas, el cálculo de indicadores de rentabilidad, el análisis de precipitación, la estimación de modelos estadísticos y la elaboración de mapas temáticos interactivos.
+
+El análisis se centra en los cultivos de **café, cacao y frijol**, debido a su importancia dentro de la base agrícola del municipio y a la disponibilidad de información productiva, económica y espacial.
+
+---
+
+## Objetivo general
+
+Analizar la rentabilidad de los sistemas agrícolas del municipio de La Paz, Cesar, mediante el uso de herramientas estadísticas y geoespaciales.
+
+---
+
+## Objetivos específicos
+
+1. Identificar y caracterizar los principales cultivos y sistemas agrícolas presentes en el municipio de La Paz, Cesar, recopilando información productiva, económica y espacial proveniente de fuentes institucionales y bases de datos públicas.
+
+2. Analizar la relación entre variables agroambientales y productivas, evaluando cómo factores como precipitación, tipo de suelo y disponibilidad de recursos influyen en la productividad y rentabilidad agrícola.
+
+3. Elaborar mapas temáticos y análisis espaciales que representen la distribución de los cultivos y los niveles de rentabilidad, identificando zonas críticas y áreas con potencial productivo.
+
+---
+
+## Funcionamiento del repositorio
+
+Este repositorio está organizado para permitir la revisión y reproducción del análisis realizado en el trabajo de grado. El archivo principal es:
+
+```text
+trabajo-grado-rentabilidad-agricola.Rmd
+```
+
+Este archivo contiene el texto del documento, el código utilizado, las tablas, gráficos, modelos estadísticos y mapas interactivos.
+
+Al ejecutar el archivo `.Rmd` en RStudio, se genera el documento final en formato HTML:
+
+```text
+trabajo-grado-rentabilidad-agricola.html
+```
+
+El archivo HTML permite visualizar el documento completo, incluyendo los mapas interactivos desarrollados con herramientas geoespaciales.
 
 ---
 
@@ -20,6 +66,10 @@ analisis-agricola/
 │   │   ├── rend_productores_2024.csv
 │   │   ├── POWER_Point_Daily_20240101_20241231_010d38N_073d17W_LST.csv
 │   │   └── shapefiles/
+│   │       ├── veredas_con_datos.dbf
+│   │       ├── veredas_con_datos.prj
+│   │       ├── veredas_con_datos.shp
+│   │       └── veredas_con_datos.shx
 │   │
 │   └── processed/
 │       └── precipitacion_mensual_LaPaz_2024.csv
@@ -35,68 +85,89 @@ analisis-agricola/
 
 ---
 
-## Archivos principales
+## Descripción de carpetas y archivos
 
-| Archivo o carpeta                            | Descripción                                                                                                            |
-| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `trabajo-grado-rentabilidad-agricola.Rmd`    | Archivo principal del proyecto. Contiene el código, texto, gráficos, tablas, mapas y análisis.                         |
-| `trabajo-grado-rentabilidad-agricola.html`   | Documento final generado a partir del R Markdown. Incluye los resultados y mapas interactivos.                         |
-| `trabajo-grado-rentabilidad-agricola_files/` | Carpeta generada automáticamente por R Markdown. Contiene archivos necesarios para que el HTML funcione correctamente. |
-| `estilos.css`                                | Archivo de estilos para mejorar la presentación visual del documento HTML.                                             |
-| `data/raw/`                                  | Carpeta con las bases de datos originales utilizadas en el análisis.                                                   |
-| `data/processed/`                            | Carpeta con bases procesadas o transformadas durante el análisis.                                                      |
-| `analisis agricola.Rproj`                    | Archivo del proyecto de RStudio. Se recomienda abrir este archivo antes de ejecutar el análisis.                       |
+| Elemento                                     | Descripción                                                                                  |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| `data/raw/`                                  | Contiene las bases de datos originales utilizadas en el análisis.                            |
+| `data/raw/shapefiles/`                       | Contiene los archivos espaciales utilizados para los mapas por vereda.                       |
+| `data/processed/`                            | Contiene bases procesadas o derivadas del análisis, como la precipitación mensual.           |
+| `trabajo-grado-rentabilidad-agricola.Rmd`    | Archivo principal del proyecto. Contiene el documento y el código del análisis.              |
+| `trabajo-grado-rentabilidad-agricola.html`   | Documento final generado a partir del R Markdown.                                            |
+| `trabajo-grado-rentabilidad-agricola_files/` | Carpeta generada automáticamente por R Markdown para que el HTML funcione correctamente.     |
+| `estilos.css`                                | Archivo de estilos utilizado para mejorar la presentación visual del documento HTML.         |
+| `analisis agricola.Rproj`                    | Archivo del proyecto de RStudio. Se recomienda abrir este archivo para trabajar el proyecto. |
+| `.gitignore`                                 | Archivo que indica qué elementos no deben ser incluidos en el repositorio.                   |
 
 ---
 
 ## Bases de datos utilizadas
 
-Las bases de datos se encuentran organizadas dentro de la carpeta `data/`.
+El análisis utiliza las siguientes bases de datos:
 
-### Datos originales
+### Bases agrícolas
 
-La carpeta `data/raw/` contiene las bases originales utilizadas en el análisis:
+```text
+data/raw/corrver.xlsx
+data/raw/productos_a.xlsx
+data/raw/rend_productores_2024.csv
+```
 
-* `corrver.xlsx`: información relacionada con corregimientos y veredas.
-* `productos_a.xlsx`: información de líneas productivas agrícolas.
-* `rend_productores_2024.csv`: base principal con información productiva y económica de los productores.
-* `POWER_Point_Daily_20240101_20241231_010d38N_073d17W_LST.csv`: datos diarios de precipitación obtenidos de NASA POWER.
-* `shapefiles/`: archivos espaciales utilizados para la elaboración de mapas por vereda.
+Estas bases contienen información relacionada con corregimientos, veredas, líneas productivas, productores, área sembrada, producción, precios, costos y cultivos.
 
-### Datos procesados
+### Datos climáticos
 
-La carpeta `data/processed/` contiene archivos derivados del procesamiento de datos:
+```text
+data/raw/POWER_Point_Daily_20240101_20241231_010d38N_073d17W_LST.csv
+```
 
-* `precipitacion_mensual_LaPaz_2024.csv`: precipitación mensual calculada a partir de los datos diarios de NASA POWER.
+Este archivo contiene datos diarios de precipitación para el año 2024, obtenidos de NASA POWER.
+
+A partir de esta información se generó la base procesada:
+
+```text
+data/processed/precipitacion_mensual_LaPaz_2024.csv
+```
+
+### Información espacial
+
+```text
+data/raw/shapefiles/
+```
+
+Esta carpeta contiene el shapefile de veredas utilizado para la elaboración de mapas temáticos y análisis espacial.
 
 ---
 
-## Cómo ejecutar el proyecto
 
-Para reproducir el análisis, se recomienda seguir estos pasos:
+---
 
-1. Descargar o clonar este repositorio.
+## Análisis realizados
 
-2. Abrir el proyecto en RStudio desde el archivo:
+El proyecto incluye los siguientes análisis:
 
-```text
-analisis agricola.Rproj
-```
+1. Caracterización de las líneas productivas agrícolas del municipio.
+2. Selección de los cultivos de café, cacao y frijol.
+3. Cálculo de producción, área sembrada, costos, ingresos, margen y ROI.
+4. Análisis descriptivo mediante tablas, gráficos de barras, histogramas y boxplots.
+5. Incorporación de la precipitación como variable agroambiental.
+6. Estimación de un modelo de regresión lineal múltiple.
+7. Elaboración de mapas interactivos por vereda.
+8. Aplicación del Índice de Moran global para evaluar autocorrelación espacial.
 
-3. Abrir el archivo principal:
+---
 
-```text
-trabajo-grado-rentabilidad-agricola.Rmd
-```
+---
 
-4. Verificar que las bases de datos se encuentren en las carpetas:
+## Requisitos para ejecutar el proyecto
 
-```text
-data/raw/
-data/processed/
-```
+Para ejecutar el proyecto se requiere tener instalado:
 
-5. Instalar los paquetes necesarios de R, si no están instalados:
+* R
+* RStudio
+* Git, si se desea clonar o actualizar el repositorio
+
+También se utilizan los siguientes paquetes de R:
 
 ```r
 install.packages(c(
@@ -111,13 +182,38 @@ install.packages(c(
 ))
 ```
 
-6. Ejecutar el documento usando:
+---
+
+## Cómo ejecutar el proyecto
+
+1. Descargar o clonar el repositorio.
+
+2. Abrir el proyecto en RStudio desde el archivo:
+
+```text
+analisis agricola.Rproj
+```
+
+3. Abrir el archivo principal:
+
+```text
+trabajo-grado-rentabilidad-agricola.Rmd
+```
+
+4. Verificar que las bases de datos se encuentren dentro de las carpetas:
+
+```text
+data/raw/
+data/processed/
+```
+
+5. Ejecutar el documento con la opción:
 
 ```text
 Knit → Knit to HTML
 ```
 
-7. El resultado se generará en el archivo:
+6. El archivo final generado será:
 
 ```text
 trabajo-grado-rentabilidad-agricola.html
@@ -125,55 +221,40 @@ trabajo-grado-rentabilidad-agricola.html
 
 ---
 
-## Salida principal del proyecto
+## Visualización del documento HTML
 
-La salida principal es el documento HTML:
+El archivo HTML puede visualizarse correctamente descargando el repositorio y abriendo el archivo:
 
 ```text
 trabajo-grado-rentabilidad-agricola.html
 ```
 
-Este archivo contiene:
+en un navegador web.
 
-* resumen del trabajo;
-* metodología;
-* resultados descriptivos;
-* cálculo de rentabilidad agrícola;
-* modelo de regresión;
-* mapas interactivos por vereda;
-* análisis del Índice de Moran;
-* conclusiones y referencias.
+Debido a que GitHub no siempre permite visualizar directamente archivos HTML interactivos desde la vista del repositorio, especialmente cuando contienen mapas interactivos, se recomienda descargar el proyecto o utilizar GitHub Pages para su publicación como página web.
 
 ---
 
-## Visualización del HTML
-
-El archivo HTML puede abrirse localmente en el navegador después de descargar el repositorio.
-
-Debido a que GitHub no siempre muestra archivos HTML interactivos directamente desde la vista del repositorio, para visualizarlo correctamente se recomienda:
-
-1. Descargar el repositorio y abrir el archivo `.html` en el navegador; o
-2. Publicar el documento mediante GitHub Pages.
-
----
-
-## Notas sobre reproducibilidad
+## Reproducibilidad
 
 El proyecto utiliza rutas relativas, por ejemplo:
 
-```r
+```text
 data/raw/rend_productores_2024.csv
+data/raw/shapefiles/veredas_con_datos.shp
 data/processed/precipitacion_mensual_LaPaz_2024.csv
 ```
 
-Esto permite que el análisis pueda ejecutarse en otro computador siempre que se mantenga la estructura de carpetas del repositorio.
+Esto permite que el análisis pueda ejecutarse en otro computador siempre que se conserve la estructura del repositorio.
 
 ---
 
-## Autor
+## Consideraciones sobre los datos
 
-**Nedilson Pushaina Ramírez**
-Universidad Nacional de Colombia
-Sede de La Paz
-Trabajo de grado – Estadística
-2026
+Las bases de datos utilizadas no contienen información personal sensible de los productores. Los resultados se presentan de forma agregada por cultivo y por vereda, con fines académicos y de análisis estadístico.
+
+---
+
+## Estado del proyecto
+
+El repositorio contiene el documento principal del trabajo de grado, las bases de datos utilizadas, los archivos espaciales, el archivo HTML generado y los estilos visuales empleados para su presentación.
