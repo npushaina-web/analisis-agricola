@@ -99,6 +99,13 @@ analisis-agricola/
 
 ---
 
+## Presentación del trabajo
+
+La presentación utilizada para la socialización del trabajo de grado se encuentra en la carpeta:
+
+```text
+presentacion/
+
 ## Bases de datos utilizadas
 
 El análisis utiliza las siguientes bases de datos:
