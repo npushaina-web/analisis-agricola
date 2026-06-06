@@ -1,7 +1,7 @@
 ---
 title: "Análisis estadístico y geoespacial de la rentabilidad agrícola en el municipio de La Paz, Cesar"
 author: "Nedilson Pushaina Ramírez"
-date: "12 de marzo de 2026"
+date: "05 de junio de 2026"
 output:
   html_document:
     toc: true
@@ -160,11 +160,8 @@ rend <- read.csv("data/raw/rend_productores_2024.csv")
 table(rend$CULTIVO)
 
 
-head(corrver)
-head(productos_a)
-head(rend)
-```
 
+```
 
 ```{r pressure6, echo=FALSE}
 
@@ -227,7 +224,6 @@ write.csv(
 
 
 ```
-
 
 La base de datos agrícola del municipio de La Paz, Cesar, permitió identificar diferentes líneas productivas presentes en el territorio. Entre ellas se encontraron cultivos como café, cacao, frijol, yuca, cilantro, plátano, lulo, maíz, tomate, aguacate, ahuyama, entre otros.
 
@@ -503,34 +499,29 @@ El ROI fue utilizado como indicador principal de rentabilidad, ya que permite me
 
 El ingreso bruto se calculó mediante la siguiente expresión:
 
-\[
+$$
 Ingreso\ Bruto = Producción\ (kg) \times Precio\ (\$/kg)
-\]
-
+$$
 
 El costo total de producción se estimó a partir del área sembrada y el costo promedio por hectárea:
 
-\[
+$$
 Costo\ Total = Área\ (ha) \times Costo\ por\ hectárea
-\]
-
+$$
 
 El margen de ganancia se calculó como la diferencia entre el ingreso bruto y el costo total:
 
-\[
+$$
 Margen = Ingreso\ Bruto - Costo\ Total
-\]
-
+$$
 
 La rentabilidad agrícola se evaluó mediante el retorno sobre la inversión:
 
-\[
+$$
 ROI = \frac{Ingreso\ Bruto - Costo\ Total}{Costo\ Total}
-\]
-Para expresarlo en porcentaje:
-\[
+$$ Para expresarlo en porcentaje: $$
 ROI(\%) = ROI \times 100
-\]
+$$
 
 ```{r pressure36, echo=FALSE}
 rend$INGRESO_BRUTO <- rend$PRODUCCION_KG * rend$PRECIO_KG
@@ -691,14 +682,14 @@ $$
 
 Las hipótesis del modelo de regresión múltiple fueron:
 
-\[
+$$
 \left\{
 \begin{array}{ll}
 H_0: & \beta_1 = \beta_2 = \beta_3 = \beta_4 = \beta_5 = 0 \\[6pt]
 H_1: & \text{Al menos un } \beta_j \neq 0,\quad j = 1,2,3,4,5
 \end{array}
 \right.
-\]
+$$
 
 Bajo estas hipótesis, si el p-valor del modelo es menor a 0.05, se rechaza la hipótesis nula y se concluye que al menos una de las variables incluidas tiene relación estadísticamente significativa con la rentabilidad agrícola.
 
@@ -754,14 +745,11 @@ summary(modelo_precipitacion_completo)
 
 ```
 
-
-
 Los resultados del modelo de regresión múltiple mostraron que el modelo general fue estadísticamente significativo, con un p-valor menor a 0.05. El R² ajustado fue de 0.5104, lo que indica que las variables incluidas explican aproximadamente el 51% de la variación del ROI.
 
 La precipitación presentó un coeficiente positivo; sin embargo, no fue estadísticamente significativa, dado que su p-valor fue de 0.217. Esto indica que, para los datos analizados, no se encontró evidencia suficiente para afirmar que la precipitación influya directamente sobre la rentabilidad agrícola.
 
 Por otro lado, las variables área sembrada, producción, precio por kilogramo y costo por hectárea sí fueron estadísticamente significativas. La producción y el precio presentaron una relación positiva con el ROI, mientras que el área sembrada y el costo por hectárea presentaron una relación negativa.
-
 
 # Mapas temáticos y análisis geoespacial
 
@@ -778,10 +766,10 @@ Con el fin de identificar la distribución espacial de la actividad agrícola en
 ```{r pressure9, include = FALSE}
 library(sf)
 
-veredas <- st_read("C:/Users/hp122/Downloads/shapefile_lapaz/veredas_con_datos.shp")
-unique(veredas$vereda)
+veredas <- st_read("data/raw/shapefiles/veredas_con_datos.shp", quiet = TRUE)
 
-sort(unique(veredas$vereda))
+
+
 ```
 
 ```{r pressure16, echo=FALSE}
@@ -994,7 +982,6 @@ leaflet(mapa_area) %>%
 
 ```
 
-
 ## Autocorrelación espacial: Índice de Moran
 
 Para evaluar la existencia de autocorrelación espacial en la rentabilidad promedio por vereda, se aplicó el Índice de Moran global:
@@ -1015,8 +1002,6 @@ Donde:
 -   $S_0$ es la suma total de los pesos espaciales.
 
 Este indicador permite identificar si las veredas con valores similares de rentabilidad tienden a agruparse espacialmente o si la distribución presenta un patrón aleatorio.
-
-
 
 ```{r moran-calculo, include=FALSE}
 library(spdep)
@@ -1066,10 +1051,10 @@ knitr::kable(
 )
 
 ```
+
 El resultado obtenido presentó un Índice de Moran positivo bajo y un p-valor mayor a 0.05. Por esta razón, no se rechaza la hipótesis nula. Esto indica que no existe evidencia estadística suficiente para afirmar que la rentabilidad agrícola esté agrupada espacialmente entre las veredas analizadas.
 
 En otras palabras, las veredas con rentabilidades altas o bajas no mostraron un patrón espacial significativo de concentración.
-
 
 # Conclusiones
 
@@ -1110,4 +1095,3 @@ RStudio Team. (2024). *RStudio: Integrated Development Environment for R*. Posit
 OpenStreetMap contributors. (2024). *OpenStreetMap*. Utilizado como mapa base para la visualización geoespacial.
 
 Hijmans, R. J., Pebesma, E., Bivand, R., & otros desarrolladores de paquetes espaciales en R. (2024). *Paquetes de R utilizados para análisis estadístico y geoespacial: sf, leaflet, ggplot2 y spdep*.
-
