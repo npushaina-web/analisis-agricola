@@ -164,7 +164,7 @@ table(rend$CULTIVO)
 
 # Cargar correctamente archivo NASA POWER
 
-archivo <- "C:/Users/hp122/Downloads/POWER_Point_Daily_20240101_20241231_010d38N_073d17W_LST.csv"
+archivo <- "data/raw/POWER_Point_Daily_20240101_20241231_010d38N_073d17W_LST.csv"
 
 # Leer todas las líneas
 lineas <- readLines(archivo)
