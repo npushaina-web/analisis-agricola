@@ -150,15 +150,21 @@ library(knitr)
 ```{r pressure2, include=FALSE}
 
 
+library(readxl)
 
-corrver <- read_excel("C:/Users/hp122/Downloads/corrver.xlsx")
+corrver <- read_excel("data/raw/corrver.xlsx")
 
-productos_a <- read_excel("C:/Users/hp122/Downloads/productos_a.xlsx")
+productos_a <- read_excel("data/raw/productos_a.xlsx")
 
-rend <- read.csv("C:/Users/hp122/Downloads/rend - Hoja 1 (2).csv")
+rend <- read.csv("data/raw/rend_productores_2024.csv")
 table(rend$CULTIVO)
 
+
+head(corrver)
+head(productos_a)
+head(rend)
 ```
+
 
 ```{r pressure6, echo=FALSE}
 
