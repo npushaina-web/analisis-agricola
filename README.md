@@ -1,11 +1,12 @@
 # Análisis estadístico y geoespacial de la rentabilidad agrícola en el municipio de La Paz, Cesar
 
 **Autor:** Nedilson Pushaina Ramírez
-**Universidad:** Universidad Nacional de Colombia – Sede de La Paz
-**Programa:** Estadística
-**Tipo de documento:** Trabajo de grado
-**Año de análisis:** 2024
 
+**Universidad:** Universidad Nacional de Colombia – Sede de La Paz
+
+**Programa:** Estadística
+
+**Tipo de documento:** Trabajo de grado
 ---
 
 ## Descripción general
