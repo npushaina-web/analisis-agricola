@@ -1,4 +1,14 @@
-.Rproj.user
 .Rhistory
 .RData
-.Ruserdata
+.Rproj.user/
+
+*_files/
+figure-html/
+figure-latex/
+
+*.pdf
+*.log
+*.aux
+*.out
+*.toc
+*.tex
